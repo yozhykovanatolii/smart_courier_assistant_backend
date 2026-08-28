@@ -71,3 +71,18 @@ It also integrates with external services for route calculation, AI recommendati
 ├── models.py                 # SQLAlchemy models
 ├── requirements.txt          # Python dependencies
 └── security.py               # Authentication and security
+```
+
+## 📡 API Endpoints
+
+The API provides endpoints for:
+
+- Authentication and user management
+- Order management
+- Route optimization and ETA estimation
+- Route history
+- AI-assisted recommendations
+- Proof of delivery
+- File uploads
+
+For the complete API reference, see the interactive [Swagger UI](http://localhost:8000/docs).
