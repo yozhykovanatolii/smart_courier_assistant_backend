@@ -12,6 +12,18 @@ Smart Courier Assistant Backend is a REST API built to support the [Smart Courie
 The backend provides authentication, user and order management, route optimization, ETA estimation, delivery risk analysis, proof of delivery, and AI-assisted route recommendations.
 It also integrates with external services for route calculation, AI recommendations, and file storage.
 
+## ✨ Features
+
+- 🔐 **Authentication & Profile** – User registration, login, JWT-based authentication, profile management 
+- 📦 **Order Management** – Create, update, delete and retrieve delivery orders, manage delivery statuses
+- 📍 **Routes & ETA** – Optimize delivery routes, calculate estimated arrival times and analyze delivery risks  
+- 📜 **Route History** – Store and retrieve completed delivery routes
+- 🧠 **AI Recommendations** – Generate personalized route recommendations when delivery delays are likely
+- 📸 **Proof of Delivery (POD)** – Store delivery confirmation data, including photos and notes  
+- 🗄️ **Database** – PostgreSQL database for persistent application data
+- 📁 **File Storage** – Supabase Storage for user-uploaded media
+- 🔒 **Security** – Password hashing and JWT-based access and refresh tokens
+
 ## 🛠 Tech Stack
 
 **Core Framework**
