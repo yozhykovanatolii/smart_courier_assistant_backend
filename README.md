@@ -50,6 +50,65 @@ It also integrates with external services for route calculation, AI recommendati
 **External Services**
 - **Supabase Storage** – File storage for user uploads and media management
 
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.x
+- Docker
+
+### Installation
+1. Clone the repository
+```
+git clone https://github.com/yozhykovanatolii/smart_courier_assistant_backend.git
+```
+
+2. Configure environment variables
+
+This project uses external services to provide routing and AI-assisted features, as well as file storage.
+- **OpenRouteService** — route calculation and ETA estimation
+- **OpenAI API** — AI-assisted route recommendations
+- **Supabase Storage** — file storage for user uploads and media management
+
+To configure these services: 
+- Create an account at https://openrouteservice.org and generate an API key
+- Create an account at https://platform.openai.com and generate an API key
+- Create a project in Supabase at https://supabase.com and get your project credentials(URL and anon key)
+
+For creating SECRET_KEY and using for access and refresh tokens, you have to execute this code:
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+```
+
+Use .env.example for creating the .env file in the project root and set the following values:
+
+```env
+# Security
+SECRET_KEY=
+
+# Supabase
+SUPABASE_PROJECT_URL=
+SUPABASE_ANON_KEY=
+
+# External APIs
+OPENAI_API_KEY=
+OPENROUTE_API_KEY=
+
+# PostgreSQL
+POSTGRES_PASSWORD=postgres
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=smart_courier_assistant
+POSTGRES_USER=postgres
+```
+
+3. Run the application
+```
+docker compose up --build
+```
+The API and API documentation will be available at: http://localhost:8000 and http://localhost:8000/docs
+
+
+
 ## 🏗️ Project Structure
 
 ```text
@@ -86,3 +145,4 @@ The API provides endpoints for:
 - File uploads
 
 For the complete API reference, see the interactive [Swagger UI](http://localhost:8000/docs).
+
