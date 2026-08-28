@@ -37,3 +37,25 @@ It also integrates with external services for route calculation, AI recommendati
 
 **External Services**
 - **Supabase Storage** – File storage for user uploads and media management
+
+## 🏗️ Project Structure
+
+```text
+├── api/
+│   ├── routers/              # API route definitions
+│   ├── dependencies.py       # FastAPI dependencies
+│   └── router.py             # Main API router
+├── clients/                  # External service clients
+├── exceptions/               # Custom exceptions and error handlers
+├── repositories/             # Data access layer
+├── schemas/                  # Pydantic schemas
+├── services/                 # Business logic
+├── .env.example              # Environment variables template
+├── config.py                 # Application configuration
+├── database.py               # Database configuration
+├── docker-compose.yaml       # Docker Compose configuration
+├── Dockerfile                # Backend Docker image
+├── main.py                   # FastAPI application entry point
+├── models.py                 # SQLAlchemy models
+├── requirements.txt          # Python dependencies
+└── security.py               # Authentication and security
