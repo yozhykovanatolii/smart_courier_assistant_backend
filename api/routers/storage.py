@@ -7,7 +7,7 @@ storage_router = APIRouter(prefix='/storage')
 StorageServiceDependency = Annotated[StorageService, Depends(get_storage_service)]
 
 @storage_router.post('/upload', status_code = status.HTTP_200_OK)
-async def upload_image(storageService: StorageServiceDependency, file: UploadFile = File(...), bucket: str = Form(...)):
+async def upload_image(storage_service: StorageServiceDependency, file: UploadFile = File(...), bucket: str = Form(...)):
     file_bytes = await file.read()
-    image_url = storageService.save_image(file_bytes, file.content_type, file.filename, bucket)
+    image_url = storage_service.save_image(file_bytes, file.content_type, file.filename, bucket)
     return {'url': image_url}

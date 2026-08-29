@@ -10,27 +10,27 @@ RouteServiceDependency = Annotated[RouteService, Depends(get_route_service)]
 CurrentUser = Annotated[UserInfoSchema, Depends(get_current_user)]
 
 @route_router.get('')
-async def get_courier_routes(routeService: RouteServiceDependency, currentUser: CurrentUser):
-    routes = await routeService.get_courier_routes(currentUser.id)
+async def get_courier_routes(route_service: RouteServiceDependency, current_user: CurrentUser):
+    routes = await route_service.get_courier_routes(current_user.id)
     return routes
 
-@route_router.post('/optimize')
-async def optimize_route(route_optimization: RouteOptimizationSchema, routeService: RouteServiceDependency, currentUser: CurrentUser):
-    orders = await routeService.optimize_route(currentUser.id, route_optimization)
+@route_router.post('/today/optimize')
+async def optimize_today_route(route_optimization: RouteOptimizationSchema, route_service: RouteServiceDependency, current_user: CurrentUser):
+    orders = await route_service.optimize_route(current_user.id, route_optimization)
     return orders
     
-@route_router.post('/analysis')    
-async def analyze_route(route_analysis: RouteAnalysisSchema, routeService: RouteServiceDependency, currentUser: CurrentUser):
-    route_recommendations = await routeService.analyze_route(currentUser.id, route_analysis)
+@route_router.post('/today/analysis')    
+async def analyze_today_route(route_analysis: RouteAnalysisSchema, route_service: RouteServiceDependency, current_user: CurrentUser):
+    route_recommendations = await route_service.analyze_route(current_user.id, route_analysis)
     return {'recommendation': route_recommendations}
     
 @route_router.get('/today/recommendation')
-async def get_route_today_recommendation(routeService: RouteServiceDependency, currentUser: CurrentUser):
-    route_recommendation = await routeService.get_route_today_recommendation(currentUser.id)
+async def get_today_route_recommendation(route_service: RouteServiceDependency, current_user: CurrentUser):
+    route_recommendation = await route_service.get_route_today_recommendation(current_user.id)
     return {'recommendation': route_recommendation}    
     
     
 @route_router.post('/today/polyline')
-async def get_route_polyline(route_polyline_request: RoutePolylineSchema, routeService: RouteServiceDependency):
-    route_polyline = await routeService.get_route_polyline(route_polyline_request)
+async def get_route_polyline(route_polyline_request: RoutePolylineSchema, route_service: RouteServiceDependency):
+    route_polyline = await route_service.get_route_polyline(route_polyline_request)
     return route_polyline

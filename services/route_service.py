@@ -9,27 +9,27 @@ from schemas.route import RouteAnalysisSchema, RouteInfoSchema, RouteOptimizatio
 from datetime import datetime, timedelta, timezone
 
 class RouteService:
-    def __init__(self, routeRepository: RouteRepository, orderRepository: OrderRepository, openRouteClient: OpenRouteClient, chatGptClient: ChatGptClient):
-        self.__route_repository = routeRepository
-        self.__order_repository = orderRepository
-        self.__open_route_client = openRouteClient
-        self.__chat_gpt_client = chatGptClient
+    def __init__(self, route_repository: RouteRepository, order_repository: OrderRepository, open_route_client: OpenRouteClient, chat_gpt_client: ChatGptClient):
+        self.__route_repository = route_repository
+        self.__order_repository = order_repository
+        self.__open_route_client = open_route_client
+        self.__chat_gpt_client = chat_gpt_client
         
     async def optimize_route(self, courier_id: int, route_optimization: RouteOptimizationSchema):
-        db_route = await self.__route_repository.find_today_by_courier_id(courier_id)
+        db_route = await self.__route_repository.get_today_route_by_courier_id(courier_id)
         if db_route is None:
             raise AccessDeniedException()
         jobs = self.__convert_orders_to_job(route_optimization.orders)
         steps = await self.__open_route_client.optimize_route(jobs, [route_optimization.courier_longitude, route_optimization.courier_latitude])
         updated_orders = self.__calculate_eta(steps, route_optimization.orders)
         await self.__order_repository.update_orders(updated_orders)
-        db_orders = await self.__order_repository.find_active_by_route_id(db_route.id)
+        db_orders = await self.__order_repository.get_active_orders_by_route_id(db_route.id)
         if not db_orders:
             raise OrderNotFoundException()
         return [OrderInfoSchema.model_validate(db_order) for db_order in db_orders]
     
     async def analyze_route(self, courier_id: int, route_analysis: RouteAnalysisSchema):
-        db_route = self.__route_repository.find_today_by_courier_id(courier_id)
+        db_route = self.__route_repository.get_today_route_by_courier_id(courier_id)
         if db_route is None:
             raise AccessDeniedException()
         prompt = self.__generate_prompt(route_analysis)
@@ -39,13 +39,13 @@ class RouteService:
         return route_recommendation
     
     async def get_route_today_recommendation(self, courier_id: int):
-        db_route = await self.__route_repository.find_today_by_courier_id(courier_id)
+        db_route = await self.__route_repository.get_today_route_by_courier_id(courier_id)
         if db_route is None:
             raise RouteNotFoundException()
         return db_route.recommendation
     
     async def get_courier_routes(self, courier_id: int):
-        db_routes = await self.__route_repository.find_by_courier_id(courier_id)
+        db_routes = await self.__route_repository.get_route_by_courier_id(courier_id)
         if not db_routes:
             raise RouteNotFoundException()
         return [RouteInfoSchema.model_validate(db_route) for db_route in db_routes]

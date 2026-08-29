@@ -15,14 +15,14 @@ class UserRepository:
         await self.__db.refresh(db_user)
         return db_user
     
-    async def find_by_id(self, user_id: int):
+    async def get_user_by_id(self, user_id: int):
         return await self.__db.get(Users, user_id)
     
     async def update_user(self, update_data: dict):
         await self.__db.execute(update(Users), [update_data])
         await self.__db.commit()
     
-    async def find_by_email(self, email: str):
+    async def get_user_by_email(self, email: str):
         query = select(Users).where(Users.email == email)
         result = await self.__db.execute(query)
         return result.scalar_one_or_none()

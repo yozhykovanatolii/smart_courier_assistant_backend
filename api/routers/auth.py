@@ -9,14 +9,14 @@ auth_router = APIRouter(prefix='/auth')
 AuthServiceDependency = Annotated[AuthService, Depends(get_auth_service)]
 
 @auth_router.post('/register', status_code = status.HTTP_201_CREATED)
-async def register_user(userRegister: UserRegisterSchema, authService: AuthServiceDependency):
-    await authService.register_user(userRegister)
+async def register_user(user_register: UserRegisterSchema, auth_service: AuthServiceDependency):
+    await auth_service.register_user(user_register)
     return {'message': 'Success registration'}
     
 @auth_router.post('/login', status_code = status.HTTP_200_OK)
-async def login_user(userLogin: UserLoginSchema, authService: AuthServiceDependency):
-    return await authService.login_user(userLogin)
+async def login_user(user_login: UserLoginSchema, auth_service: AuthServiceDependency):
+    return await auth_service.login_user(user_login)
     
 @auth_router.post('/refresh', status_code = status.HTTP_200_OK, response_model = TokenSchema, response_model_exclude_none = True)
-async def refresh_token(token: str | None, authService: AuthServiceDependency):
-    return await authService.refresh_token(token)
+async def refresh_token(token: str | None, auth_service: AuthServiceDependency):
+    return await auth_service.refresh_token(token)

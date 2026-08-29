@@ -22,12 +22,12 @@ def create_token(token_data: dict, expires_time_minutes, token_type: str):
     encode_jwt = jwt.encode(payload, SECRET_KEY, algorithm = ALGORITHM)
     return encode_jwt
     
-def decode_token(token: str):
+def _decode_token(token: str):
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
 def decode_access_token(access_token: str):
     try:
-        payload = decode_token(access_token)
+        payload = _decode_token(access_token)
     except jwt.ExpiredSignatureError:
         raise AccessTokenExpiredException()
     except jwt.InvalidTokenError:
@@ -36,7 +36,7 @@ def decode_access_token(access_token: str):
     
 def decode_refresh_token(refresh_token: str):
     try:
-        payload = decode_token(refresh_token)
+        payload = _decode_token(refresh_token)
     except jwt.ExpiredSignatureError:
         raise RefreshTokenExpiredException()
     except jwt.InvalidTokenError:

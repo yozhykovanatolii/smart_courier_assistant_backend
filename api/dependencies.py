@@ -35,23 +35,23 @@ def get_chat_gpt_client():
 def get_supabase_storage_client():
     return SupabaseStorageClient()
 
-def get_user_service(userRepository: UserRepositoryDependency):
-    return UserService(userRepository)
+def get_user_service(user_Repository: UserRepositoryDependency):
+    return UserService(user_Repository)
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], userService: Annotated[UserService, Depends(get_user_service)]):
-    return await userService.get_user(token)
+async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], user_Service: Annotated[UserService, Depends(get_user_service)]):
+    return await user_Service.get_user(token)
 
-def get_auth_service(userRepository: UserRepositoryDependency):
-    return AuthService(userRepository)
+def get_auth_service(user_repository: UserRepositoryDependency):
+    return AuthService(user_repository)
 
-def get_order_service(orderRepository: OrderRepositoryDependency, routeRepository: RouteRepositoryDependency):
-    return OrderService(routeRepository, orderRepository)
+def get_order_service(order_repository: OrderRepositoryDependency, route_repository: RouteRepositoryDependency):
+    return OrderService(route_repository, order_repository)
 
-def get_route_service(orderRepository: OrderRepositoryDependency, routeRepository: RouteRepositoryDependency, openRouteClient: OpenRouteClientDependency, chatGptClient: ChatGptClientDependency):
-    return RouteService(routeRepository, orderRepository, openRouteClient, chatGptClient)
+def get_route_service(order_repository: OrderRepositoryDependency, route_repository: RouteRepositoryDependency, open_route_client: OpenRouteClientDependency, chat_gpt_client: ChatGptClientDependency):
+    return RouteService(route_repository, order_repository, open_route_client, chat_gpt_client)
 
-def get_storage_service(supabaseStorageClient: SupabaseStorageClientDependency):
-    return StorageService(supabaseStorageClient)
+def get_storage_service(supabase_storage_client: SupabaseStorageClientDependency):
+    return StorageService(supabase_storage_client)
 
 DatabaseSession = Annotated[AsyncSession, Depends(get_db)]
 UserRepositoryDependency = Annotated[UserRepository, Depends(get_user_repository)]

@@ -9,9 +9,9 @@ UserServiceDependency = Annotated[UserService, Depends(get_user_service)]
 CurrentUser = Annotated[UserInfoSchema, Depends(get_current_user)]
 
 @user_router.get('/me', status_code = status.HTTP_200_OK)
-async def get_user(currentUser: CurrentUser):
-    return currentUser
+async def get_user(current_user: CurrentUser):
+    return current_user
     
 @user_router.patch('/me', status_code = status.HTTP_204_NO_CONTENT)
-async def update_user(user_data: UserUpdateSchema, userService: UserServiceDependency, currentUser: CurrentUser):
-    await userService.update_user(currentUser.id, user_data)
+async def update_user(user_data: UserUpdateSchema, user_service: UserServiceDependency, current_user: CurrentUser):
+    await user_service.update_user(current_user.id, user_data)

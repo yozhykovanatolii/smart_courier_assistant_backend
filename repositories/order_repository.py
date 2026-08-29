@@ -14,7 +14,7 @@ class OrderRepository:
         await self.__db.refresh(db_order)
         return db_order
     
-    async def find_by_id(self, order_id: int):
+    async def get_order_by_id(self, order_id: int):
         return await self.__db.get(Orders, order_id)
     
     async def update_order(self, db_order_new: Orders):
@@ -29,12 +29,12 @@ class OrderRepository:
         await self.__db.execute(Update(Orders), [order.model_dump() for order in orders])
         await self.__db.commit()
         
-    async def find_active_by_route_id(self, route_id: int):
+    async def get_active_orders_by_route_id(self, route_id: int):
         query = select(Orders).where(Orders.route_id == route_id, Orders.status == 'Active')
         result = await self.__db.execute(query)
         return result.scalars().all()
     
-    async def find_by_route_id(self, route_id: int):
+    async def get_orders_by_route_id(self, route_id: int):
         query = select(Orders).where(Orders.route_id == route_id)
         result = await self.__db.execute(query)
         return result.scalars().all()

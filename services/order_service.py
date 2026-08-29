@@ -5,21 +5,21 @@ from repositories.route_repository import RouteRepository
 from schemas.order import OrderSaveSchema, OrderInfoSchema, OrderDeliveryProofSchema
 
 class OrderService:
-    def __init__(self, routeRepository: RouteRepository, orderRepository: OrderRepository):
-        self.__route_repository = routeRepository
-        self.__order_repository = orderRepository
+    def __init__(self, route_repository: RouteRepository, order_repository: OrderRepository):
+        self.__route_repository = route_repository
+        self.__order_repository = order_repository
         
     async def add_order(self, user_id: int, order_save: OrderSaveSchema):
-        db_route = await self.__route_repository.find_today_by_courier_id(user_id)
+        db_route = await self.__route_repository.get_today_route_by_courier_id(user_id)
         if db_route is None:
             db_route = await self.__route_repository.create_route(user_id)
         await self.__order_repository.create_order(db_route.id, order_save)
         
     async def update_order(self, user_id: int, order_id: int, order_save: OrderSaveSchema):
-        db_order = await self.__order_repository.find_by_id(order_id)
+        db_order = await self.__order_repository.get_order_by_id(order_id)
         if db_order is None:
             raise OrderNotFoundException()
-        db_route = await self.__route_repository.find_by_id(db_order.route_id)
+        db_route = await self.__route_repository.get_route_by_id(db_order.route_id)
         if db_route is None:
             raise RouteNotFoundException()
         if db_route.courier_id != user_id:
@@ -31,10 +31,10 @@ class OrderService:
         await self.__order_repository.update_order(db_order)
         
     async def delete_order(self, user_id: int, order_id: int):
-        db_order = await self.__order_repository.find_by_id(order_id)
+        db_order = await self.__order_repository.get_order_by_id(order_id)
         if db_order is None:
             raise OrderNotFoundException()
-        db_route = await self.__route_repository.find_by_id(db_order.route_id)
+        db_route = await self.__route_repository.get_route_by_id(db_order.route_id)
         if db_route is None:
             raise RouteNotFoundException()
         if db_route.courier_id != user_id:
@@ -42,25 +42,25 @@ class OrderService:
         await self.__order_repository.delete_order(db_order)
         
     async def get_today_orders(self, user_id: int):
-        db_route = await self.__route_repository.find_today_by_courier_id(user_id)
+        db_route = await self.__route_repository.get_today_route_by_courier_id(user_id)
         if db_route is None:
             raise RouteNotFoundException()
-        db_orders = await self.__order_repository.find_active_by_route_id(db_route.id)
+        db_orders = await self.__order_repository.get_active_orders_by_route_id(db_route.id)
         if not db_orders:
             raise OrderNotFoundException()
         return [OrderInfoSchema.model_validate(db_order) for db_order in db_orders]
     
     async def get_orders_by_route_id(self, route_id: int):
-        db_orders = await self.__order_repository.find_by_route_id(route_id)
+        db_orders = await self.__order_repository.get_orders_by_route_id(route_id)
         if not db_orders:
             raise OrderNotFoundException()
         return [OrderInfoSchema.model_validate(db_order) for db_order in db_orders]
     
     async def proof_delivery_order(self, user_id: int, order_id: int, order_delivery_proof: OrderDeliveryProofSchema):
-        db_order = await self.__order_repository.find_by_id(order_id)
+        db_order = await self.__order_repository.get_order_by_id(order_id)
         if db_order is None:
             raise OrderNotFoundException()
-        db_route = await self.__route_repository.find_by_id(db_order.route_id)
+        db_route = await self.__route_repository.get_route_by_id(db_order.route_id)
         if db_route is None:
             raise RouteNotFoundException()
         if db_route.courier_id != user_id:
