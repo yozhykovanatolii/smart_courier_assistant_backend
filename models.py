@@ -6,7 +6,7 @@ from datetime import datetime
 class Base(DeclarativeBase):
     id = Column(Integer, primary_key=True)
 
-class Users(Base):
+class User(Base):
     __tablename__ = 'users'
     
     email = Column(String, nullable=False)
@@ -16,7 +16,7 @@ class Users(Base):
     avatar_url = Column(String, nullable=False)
     
     
-class Routes(Base):
+class Route(Base):
     __tablename__ = 'routes'
     
     courier_id = Column(Integer, ForeignKey('users.id'), nullable=False)
@@ -24,7 +24,7 @@ class Routes(Base):
     created_at = Column(DateTime, default = datetime.now)
     
     
-class Orders(Base):
+class Order(Base):
     __tablename__ = 'orders'
     
     route_id = Column(Integer, ForeignKey('routes.id'), nullable=False)
