@@ -1,11 +1,15 @@
 from pydantic import BaseModel, Field, ConfigDict
-from datetime import datetime
+from datetime import datetime, time
 from schemas.validators import AddressStr, FullNameStr
 
 class OrderSaveSchema(BaseModel):
     client_full_name: FullNameStr
     client_phone_number: str = Field(pattern=r'^\+380\d{9}$')
-    delivery_by: datetime
+    floor: int | None = Field(default=None, gt=0)
+    delivery_window_start: time
+    delivery_window_end: time
+    bottle_volume_liters: float = Field(gt=0)
+    bottle_quantity: int = Field(gt=0)
     address: AddressStr
     latitude: float
     longitude: float
