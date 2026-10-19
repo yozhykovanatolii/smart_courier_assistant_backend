@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Time, Float
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.dialects.postgresql import ARRAY
 from datetime import datetime
@@ -30,13 +30,17 @@ class Order(Base):
     route_id = Column(Integer, ForeignKey('routes.id'), nullable=False)
     client_full_name = Column(String, nullable=False)
     client_phone_number = Column(String, nullable=False)
-    delivery_by = Column(DateTime, nullable=False)
     delivery_risk = Column(String, default = 'Uknown')
     status = Column(String, default = 'Active')
     planned_eta = Column(DateTime, default = datetime.now)
     address = Column(String, nullable=False)
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
+    floor = Column(Integer, nullable=True, default=None)
+    delivery_window_start = Column(Time, nullable=False)
+    delivery_window_end = Column(Time, nullable=False)
+    bottle_volume_liters = Column(Float, nullable=False)
+    bottle_quantity = Column(Integer, nullable=False)
     courier_comment = Column(String, default=None, nullable=True)
     confirmed_at = Column(DateTime, default=None, nullable=True)
     order_photos_url = Column(ARRAY(String), default=None, nullable=True)
