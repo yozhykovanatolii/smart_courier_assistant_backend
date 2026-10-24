@@ -47,3 +47,10 @@ class OrderOptimizationSchema(BaseModel):
     delivery_risk: str
     planned_eta: datetime
     order_index: int
+    
+class RiskyOrderSchema(BaseModel):
+    id: int
+    address: AddressStr
+    delivery_risk: str
+    delay_minutes: int
+    position_in_route: int

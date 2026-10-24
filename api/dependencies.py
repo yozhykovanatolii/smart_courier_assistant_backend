@@ -1,6 +1,7 @@
 from typing import Annotated
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
+from clients.chat_gpt_client import ChatGptClient
 from clients.supabase_storage_client import SupabaseStorageClient
 from database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,6 +29,9 @@ def get_user_repository(db: DatabaseSession):
 def get_open_route_client():
     return OpenRouteClient()
 
+def get_chat_gpt_client():
+    return ChatGptClient()
+
 def get_supabase_storage_client():
     return SupabaseStorageClient()
 
@@ -43,8 +47,8 @@ def get_auth_service(user_repository: UserRepositoryDependency):
 def get_order_service(order_repository: OrderRepositoryDependency, route_repository: RouteRepositoryDependency):
     return OrderService(route_repository, order_repository)
 
-def get_route_service(order_repository: OrderRepositoryDependency, route_repository: RouteRepositoryDependency, open_route_client: OpenRouteClientDependency):
-    return RouteService(route_repository, order_repository, open_route_client)
+def get_route_service(order_repository: OrderRepositoryDependency, route_repository: RouteRepositoryDependency, open_route_client: OpenRouteClientDependency, chat_gpt_client: ChatGptClientDependency):
+    return RouteService(route_repository, order_repository, open_route_client, chat_gpt_client)
 
 def get_storage_service(supabase_storage_client: SupabaseStorageClientDependency):
     return StorageService(supabase_storage_client)
@@ -54,4 +58,5 @@ UserRepositoryDependency = Annotated[UserRepository, Depends(get_user_repository
 OrderRepositoryDependency = Annotated[OrderRepository, Depends(get_order_repository)]
 RouteRepositoryDependency = Annotated[RouteRepository, Depends(get_route_repository)]
 OpenRouteClientDependency = Annotated[OpenRouteClient, Depends(get_open_route_client)]
+ChatGptClientDependency = Annotated[ChatGptClient, Depends(get_chat_gpt_client)]
 SupabaseStorageClientDependency = Annotated[SupabaseStorageClient, Depends(get_supabase_storage_client)]

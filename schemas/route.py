@@ -22,3 +22,8 @@ class RouteInfoSchema(BaseModel):
     created_at: datetime
     recommendation: str
     
+class RouteAnalysisSchema(BaseModel):
+    language_code: str
+    total_orders: int
+    risky_orders: list[RiskyOrderSchema]
+    
