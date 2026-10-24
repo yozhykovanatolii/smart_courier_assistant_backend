@@ -6,8 +6,7 @@ class OrderSaveSchema(BaseModel):
     client_full_name: FullNameStr
     client_phone_number: str = Field(pattern=r'^\+380\d{9}$')
     floor: int | None = Field(default=None, gt=0)
-    delivery_window_start: time
-    delivery_window_end: time
+    delivery_by: time
     bottle_volume_liters: float = Field(gt=0)
     bottle_quantity: int = Field(gt=0)
     address: AddressStr
@@ -42,14 +41,9 @@ class OrderOptimizationSchema(BaseModel):
     id: int
     latitude: float
     longitude: float
-    delivery_by: datetime
+    delivery_by: time
+    bottle_quantity: int
+    floor: int | None
     delivery_risk: str
     planned_eta: datetime
     order_index: int
-    
-class RiskyOrderSchema(BaseModel):
-    id: int
-    address: AddressStr
-    delivery_risk: str
-    delay_minutes: int
-    position_in_route: int

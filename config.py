@@ -4,7 +4,6 @@ class Settings(BaseSettings):
     secret_key: str
     supabase_project_url: str
     supabase_anon_key: str
-    openai_api_key: str
     openroute_api_key: str
     postgres_password: str 
     postgres_host: str 

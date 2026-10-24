@@ -31,6 +31,27 @@ class OpenRouteClient:
         data = response.json()
         return data['routes'][0]['steps']
     
+    async def get_locations_duration(self, locations: list[list[float]]):
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "https://api.openrouteservice.org/v2/matrix/driving-car",
+                headers={
+                    "Authorization": f'{self.__api_key}',
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "locations": locations,
+                    "metrics": ["duration"],
+                    "sources": [0],
+                    "destinations": list(range(1, len(locations)))
+                },
+            )
+        if response.status_code != 200:
+            raise OptimizationRouteException()
+        
+        data = response.json()
+        return data['durations'][0]
+    
     
     async def get_route_polyne(self, coordinates: list[list[float]]):
         async with httpx.AsyncClient() as client:
