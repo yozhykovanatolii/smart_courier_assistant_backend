@@ -1,6 +1,6 @@
 import httpx
 from config import settings
-from exceptions.external_service_exception import OptimizationRouteException
+from exceptions.external_service_exception import LocationsDurationException, OptimizationRouteException
 
 class OpenRouteClient:
     def __init__(self):
@@ -47,7 +47,7 @@ class OpenRouteClient:
                 },
             )
         if response.status_code != 200:
-            raise OptimizationRouteException()
+            raise LocationsDurationException()
         
         data = response.json()
         return data['durations'][0]

@@ -17,3 +17,10 @@ class OptimizationRouteException(ExternalServiceException):
             message="Failed to optimize the route",
             error_code="route_optimization_failed",
         )
+        
+class LocationsDurationException(ExternalServiceException):
+    def __init__(self):
+        super().__init__(
+            message="Failed to calculate the duration of locations",
+            error_code="locations_calculation_duration_failed",
+        )
