@@ -11,7 +11,7 @@ class AuthService:
         
     async def register_user(self, user_register: UserRegisterSchema):
         db_user = await self.__user_repository.get_user_by_email(user_register.email)
-        if db_user is not None:
+        if db_user is not None and db_user.is_verified:
             raise EmailAlreadyUsedException()
         user_register.password = get_password_hash(user_register.password)
         await self.__user_repository.create_user(user_register)
