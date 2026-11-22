@@ -1,3 +1,4 @@
+import secrets
 import jwt
 import hmac
 import hashlib
@@ -20,6 +21,12 @@ def hash_email(email: str) -> str:
         msg=normalized_email.encode("utf-8"),
         digestmod=hashlib.sha256,
     ).hexdigest()
+    
+def generate_code() -> str:
+    return f"{secrets.randbelow(1_000_000):06d}"
+
+def verify_otp_code(stored_code: str, input_code: str) -> bool:
+    return hmac.compare_digest(stored_code, input_code.strip())
 
 def verify_password(password: str, hash_key: str):
     password_hash = PasswordHash.recommended()

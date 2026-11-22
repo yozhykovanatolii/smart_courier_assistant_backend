@@ -9,10 +9,12 @@ from database.postgresql import get_postgresql_db
 from redis.asyncio import Redis
 from database.redis import get_redis
 from repositories.order_repository import OrderRepository
+from repositories.otp_repository import OtpRepository
 from repositories.route_repository import RouteRepository
 from repositories.user_repository import UserRepository
 from services.auth_service import AuthService
 from services.order_service import OrderService
+from services.otp_service import OtpService
 from services.route_service import RouteService
 from services.storage_service import StorageService
 from services.user_service import UserService
@@ -28,6 +30,9 @@ def get_route_repository(db: DatabaseSession):
 def get_user_repository(db: DatabaseSession):
     return UserRepository(db)
 
+def get_otp_repository(redis: RedisDependency):
+    return OtpRepository(redis)
+
 def get_open_route_client():
     return OpenRouteClient()
 
@@ -39,6 +44,9 @@ def get_supabase_storage_client():
 
 def get_user_service(user_Repository: UserRepositoryDependency):
     return UserService(user_Repository)
+
+def get_otp_service(otp_repository: OtpRepositoryDependency, user_repository: UserRepositoryDependency):
+    return OtpService(otp_repository, user_repository)
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)], user_Service: Annotated[UserService, Depends(get_user_service)]):
     return await user_Service.get_user(token)
@@ -57,6 +65,7 @@ def get_storage_service(supabase_storage_client: SupabaseStorageClientDependency
 
 DatabaseSession = Annotated[AsyncSession, Depends(get_postgresql_db)]
 RedisDependency = Annotated[Redis, Depends(get_redis)]
+OtpRepositoryDependency = Annotated[OtpRepository, Depends(get_otp_repository)]
 UserRepositoryDependency = Annotated[UserRepository, Depends(get_user_repository)]
 OrderRepositoryDependency = Annotated[OrderRepository, Depends(get_order_repository)]
 RouteRepositoryDependency = Annotated[RouteRepository, Depends(get_route_repository)]

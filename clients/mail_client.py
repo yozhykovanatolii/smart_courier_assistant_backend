@@ -2,7 +2,7 @@ from email.message import EmailMessage
 from config import settings
 import aiosmtplib
 
-async def send_verification_letter(recipient_email: str, otp_code: int):
+async def send_verification_letter(recipient_email: str, otp_code: str):
     message = EmailMessage()
     message['From'] = settings.smtp_user
     message["To"] = recipient_email
