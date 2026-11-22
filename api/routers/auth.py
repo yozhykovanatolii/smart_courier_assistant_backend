@@ -1,6 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from api.dependencies import get_auth_service
+from clients.mail_client import send_verification_letter
 from schemas.token import TokenSchema
 from schemas.user import UserRegisterSchema, UserLoginSchema
 from services.auth_service import AuthService
@@ -11,6 +12,7 @@ AuthServiceDependency = Annotated[AuthService, Depends(get_auth_service)]
 @auth_router.post('/register', status_code = status.HTTP_201_CREATED)
 async def register_user(user_register: UserRegisterSchema, auth_service: AuthServiceDependency):
     await auth_service.register_user(user_register)
+    await send_verification_letter(user_register.email, 123456)
     return {'message': 'Success registration'}
     
 @auth_router.post('/login', status_code = status.HTTP_200_OK)
