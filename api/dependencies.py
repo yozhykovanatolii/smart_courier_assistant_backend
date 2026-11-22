@@ -3,9 +3,9 @@ from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from clients.chat_gpt_client import ChatGptClient
 from clients.supabase_storage_client import SupabaseStorageClient
-from database import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from clients.open_route_client import OpenRouteClient
+from database.postgresql import get_db
 from repositories.order_repository import OrderRepository
 from repositories.route_repository import RouteRepository
 from repositories.user_repository import UserRepository
