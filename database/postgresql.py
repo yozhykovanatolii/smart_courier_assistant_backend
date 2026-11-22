@@ -12,6 +12,6 @@ async def init_postgresql_db():
     async with engine.begin() as connection:
         await connection.run_sync(models.Base.metadata.create_all)
     
-async def get_db():
+async def get_postgresql_db():
     async with async_session_maker() as session:
         yield session

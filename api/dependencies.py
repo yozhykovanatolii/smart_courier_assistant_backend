@@ -5,7 +5,9 @@ from clients.chat_gpt_client import ChatGptClient
 from clients.supabase_storage_client import SupabaseStorageClient
 from sqlalchemy.ext.asyncio import AsyncSession
 from clients.open_route_client import OpenRouteClient
-from database.postgresql import get_db
+from database.postgresql import get_postgresql_db
+from redis.asyncio import Redis
+from database.redis import get_redis
 from repositories.order_repository import OrderRepository
 from repositories.route_repository import RouteRepository
 from repositories.user_repository import UserRepository
@@ -53,7 +55,8 @@ def get_route_service(order_repository: OrderRepositoryDependency, route_reposit
 def get_storage_service(supabase_storage_client: SupabaseStorageClientDependency):
     return StorageService(supabase_storage_client)
 
-DatabaseSession = Annotated[AsyncSession, Depends(get_db)]
+DatabaseSession = Annotated[AsyncSession, Depends(get_postgresql_db)]
+RedisDependency = Annotated[Redis, Depends(get_redis)]
 UserRepositoryDependency = Annotated[UserRepository, Depends(get_user_repository)]
 OrderRepositoryDependency = Annotated[OrderRepository, Depends(get_order_repository)]
 RouteRepositoryDependency = Annotated[RouteRepository, Depends(get_route_repository)]

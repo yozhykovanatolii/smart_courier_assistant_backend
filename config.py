@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     secret_key: str
+    email_hash_secret: str
     supabase_project_url: str
     supabase_anon_key: str
     openai_api_key: str
