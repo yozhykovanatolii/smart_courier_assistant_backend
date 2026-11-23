@@ -1,3 +1,4 @@
+from exceptions.access_denied_exception import EmailNotVerifiedException
 from exceptions.authentication_exception import PasswordNotVerifiedException, TokenTypeException, UserNotFoundException
 from exceptions.email_already_used_exception import EmailAlreadyUsedException
 from repositories.user_repository import UserRepository
@@ -32,6 +33,8 @@ class AuthService:
         is_password_verified = verify_password(user_login.password, db_user.password)
         if not is_password_verified:
             raise PasswordNotVerifiedException()
+        if not db_user.is_verified:
+            raise EmailNotVerifiedException()
         access_token = create_token(token_data = {'sub': str(db_user.id)}, expires_time_minutes = 30, token_type = 'access')
         refresh_token = create_token(token_data = {'sub': str(db_user.id)}, expires_time_minutes = 43200, token_type = 'refresh')
         return TokenSchema(access_token = access_token, refresh_token = refresh_token)
