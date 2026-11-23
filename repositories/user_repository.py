@@ -30,7 +30,7 @@ class UserRepository:
         )
         await self.__db.execute(query)
         await self.__db.commit()
-    
+        
     async def get_user_by_email(self, email: str):
         query = select(User).where(User.email == email)
         result = await self.__db.execute(query)
