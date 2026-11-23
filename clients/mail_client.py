@@ -13,7 +13,7 @@ async def send_verification_letter(recipient_email: str, otp_code: str):
 
         Your verification code is: {otp_code}
 
-        This code expires in 10 minutes.
+        This code expires in 5 minutes.
 
         If you didn't create an account, you can safely ignore this email.
         

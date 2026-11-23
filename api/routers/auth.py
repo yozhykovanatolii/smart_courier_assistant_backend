@@ -1,12 +1,12 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, status
 from api.dependencies import get_auth_service, get_otp_service
-from clients.mail_client import send_verification_letter
 from schemas.otp_code import ResendOtpSchema, VerifyEmailSchema
 from schemas.token import TokenSchema
 from schemas.user import UserRegisterSchema, UserLoginSchema
 from services.auth_service import AuthService
 from services.otp_service import OtpService
+from taskiq_app import send_email_letter
 
 auth_router = APIRouter(prefix='/auth')
 AuthServiceDependency = Annotated[AuthService, Depends(get_auth_service)]
@@ -16,7 +16,10 @@ OtpServiceDependency = Annotated[OtpService, Depends(get_otp_service)]
 async def register_user(user_register: UserRegisterSchema, auth_service: AuthServiceDependency, otp_service: OtpServiceDependency):
     await auth_service.register_user(user_register)
     otp_code = await otp_service.create_otp(user_register.email)
-    await send_verification_letter(user_register.email, otp_code)
+    await send_email_letter.kiq(
+        recipient_email=user_register.email,
+        otp_code=otp_code,
+    )
     return {'message': 'Success registration. Verification code has been sent to your email'}
     
 @auth_router.post('/login', status_code = status.HTTP_200_OK)
@@ -31,7 +34,10 @@ async def verify_email(verify_email_schema: VerifyEmailSchema, otp_service: OtpS
 @auth_router.post('/resend-code', status_code = status.HTTP_200_OK)
 async def resend_code(resend_otp_schema: ResendOtpSchema, otp_service: OtpServiceDependency):
     otp_code = await otp_service.resend_otp(resend_otp_schema.email)
-    await send_verification_letter(resend_otp_schema.email, otp_code)
+    await send_email_letter.kiq(
+        recipient_email=resend_otp_schema.email,
+        otp_code=otp_code,
+    )
     return {'message': 'Verification code has been resent'}
 
 @auth_router.post('/refresh', status_code = status.HTTP_200_OK, response_model = TokenSchema, response_model_exclude_none = True)

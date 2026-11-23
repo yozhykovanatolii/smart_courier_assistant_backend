@@ -1,7 +1,7 @@
 from redis.asyncio import Redis
 from config import settings
 
-REDIS_URL = settings.redis_url
+REDIS_URL = settings.cache_redis_url
 
 redis_client = Redis.from_url(REDIS_URL, decode_responses=True)
 

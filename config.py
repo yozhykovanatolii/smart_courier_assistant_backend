@@ -16,7 +16,8 @@ class Settings(BaseSettings):
     smtp_port: int
     smtp_user: str
     smtp_password: str
-    redis_url: str
+    cache_redis_url: str
+    broker_redis_url: str
     
     model_config = SettingsConfigDict(env_file=".env")
     
