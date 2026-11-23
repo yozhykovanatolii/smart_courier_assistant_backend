@@ -1,4 +1,7 @@
+import secrets
 import jwt
+import hmac
+import hashlib
 from datetime import datetime, timezone, timedelta
 from pwdlib import PasswordHash
 from config import settings
@@ -10,6 +13,20 @@ ALGORITHM = 'HS256'
 def get_password_hash(password: str):
     password_hash = PasswordHash.recommended()
     return password_hash.hash(password)
+
+def hash_email(email: str) -> str:
+    normalized_email = email.strip().lower()
+    return hmac.new(
+        key=settings.email_hash_secret.encode("utf-8"),
+        msg=normalized_email.encode("utf-8"),
+        digestmod=hashlib.sha256,
+    ).hexdigest()
+    
+def generate_code() -> str:
+    return f"{secrets.randbelow(1_000_000):06d}"
+
+def verify_otp_code(stored_code: str, input_code: str) -> bool:
+    return hmac.compare_digest(stored_code, input_code.strip())
 
 def verify_password(password: str, hash_key: str):
     password_hash = PasswordHash.recommended()

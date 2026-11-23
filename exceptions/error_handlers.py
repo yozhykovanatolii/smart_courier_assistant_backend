@@ -3,12 +3,23 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from exceptions.access_denied_exception import AccessDeniedException
 from exceptions.authentication_exception import AuthenticationException
+from exceptions.bad_request_exception import BadRequestException
 from exceptions.email_already_used_exception import EmailAlreadyUsedException
 from exceptions.external_service_exception import ExternalServiceException
 from exceptions.media_type_exception import MediaTypeException
 from exceptions.resource_not_found_exception import ResourceNotFoundException
 
 def register_error_handlers(app: FastAPI):
+    @app.exception_handler(BadRequestException)
+    def bad_request_exception_handler(_: Request, exception: BadRequestException):
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={
+                'error_code': exception.error_code,
+                'message': exception.message,
+            }
+        )
+        
     @app.exception_handler(AuthenticationException)
     def authentication_exception_handler(_: Request, exception: AuthenticationException):
         return JSONResponse(

@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     secret_key: str
+    email_hash_secret: str
     supabase_project_url: str
     supabase_anon_key: str
     openai_api_key: str
@@ -11,11 +12,17 @@ class Settings(BaseSettings):
     postgres_port: int 
     postgres_db: str
     postgres_user: str
+    smtp_host: str
+    smtp_port: int
+    smtp_user: str
+    smtp_password: str
+    cache_redis_url: str
+    broker_redis_url: str
     
     model_config = SettingsConfigDict(env_file=".env")
     
     @property
-    def database_url(self):
+    def postgres_url(self):
         return f'postgresql+asyncpg://{self.postgres_user}:{self.postgres_password}@{self.postgres_host}:{self.postgres_port}/{self.postgres_db}'
     
     

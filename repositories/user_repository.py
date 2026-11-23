@@ -21,7 +21,16 @@ class UserRepository:
     async def update_user(self, update_data: dict):
         await self.__db.execute(update(User), [update_data])
         await self.__db.commit()
-    
+        
+    async def update_user_verification_status(self, user_email: str):
+        query = (
+            update(User)
+            .where(User.email == user_email)
+            .values(is_verified = True)
+        )
+        await self.__db.execute(query)
+        await self.__db.commit()
+        
     async def get_user_by_email(self, email: str):
         query = select(User).where(User.email == email)
         result = await self.__db.execute(query)

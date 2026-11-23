@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Time, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Time, Float, Boolean
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.dialects.postgresql import ARRAY
 from datetime import datetime
@@ -14,6 +14,7 @@ class User(Base):
     full_name = Column(String, nullable=False)
     phone_number = Column(String, nullable=False)
     avatar_url = Column(String, nullable=False)
+    is_verified = Column(Boolean, default = False, nullable=False)
     
     
 class Route(Base):
