@@ -8,7 +8,7 @@ class OrderRepository:
         self.__db = db
         
     async def create_order(self, route_id: int, order_create: OrderSaveSchema):
-        db_order = Order(route_id = route_id, client_full_name = order_create.client_full_name, client_phone_number = order_create.client_phone_number, delivery_by = order_create.delivery_by, bottle_volume_liters = order_create.bottle_volume_liters, bottle_quantity = order_create.bottle_quantity, floor = order_create.floor, address = order_create.address, latitude = order_create.latitude, longitude = order_create.longitude)
+        db_order = Order(route_id = route_id, client_full_name = order_create.client_full_name, client_phone_number = order_create.client_phone_number, delivery_by = order_create.delivery_by, bottle_quantity = order_create.bottle_quantity, address = order_create.address, latitude = order_create.latitude, longitude = order_create.longitude)
         self.__db.add(db_order)
         await self.__db.commit()
         await self.__db.refresh(db_order)

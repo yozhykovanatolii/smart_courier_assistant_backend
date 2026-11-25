@@ -5,9 +5,7 @@ from schemas.validators import AddressStr, FullNameStr
 class OrderSaveSchema(BaseModel):
     client_full_name: FullNameStr
     client_phone_number: str = Field(pattern=r'^\+380\d{9}$')
-    floor: int | None = Field(default=None, gt=0)
     delivery_by: time
-    bottle_volume_liters: float = Field(gt=0)
     bottle_quantity: int = Field(gt=0)
     address: AddressStr
     latitude: float
@@ -27,6 +25,7 @@ class OrderInfoSchema(BaseModel):
     address: AddressStr
     latitude: float
     longitude: float
+    bottle_quantity: int
     courier_comment: str | None
     confirmed_at: datetime | None
     order_photos_url: list[str] | None
@@ -43,7 +42,6 @@ class OrderOptimizationSchema(BaseModel):
     longitude: float
     delivery_by: time
     bottle_quantity: int
-    floor: int | None
     delivery_risk: str
     planned_eta: datetime
     order_index: int

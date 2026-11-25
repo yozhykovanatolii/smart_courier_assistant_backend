@@ -4,20 +4,15 @@ from schemas.order import OrderOptimizationSchema
 import time
 
 
-def calculate_service(bottle_quantity: int, floor: int | None):
+def calculate_service(bottle_quantity: int):
     trips = ceil(bottle_quantity / 2)
-    if floor is None:
-        return trips * 30 + (trips - 1) * 20 + 90
-    floors_up = floor - 1
-    loading_time = trips * (30 + floors_up * 23)
-    return_time = (trips - 1) * (20 + floors_up * 12)
-    return loading_time + return_time + 90     
+    return trips * 30 + (trips - 1) * 20 + 90    
     
 def calculate_eta_by_duration(duration: list[float], orders: list[OrderOptimizationSchema]):
     start_time = datetime.now(timezone.utc)
     updated_orders = []
     for order, route_duration in zip(orders, duration):
-        service_seconds = calculate_service(order.bottle_quantity, order.floor)
+        service_seconds = calculate_service(order.bottle_quantity)
         eta = start_time + timedelta(seconds=route_duration) + timedelta(seconds=service_seconds)
         delivery_risk = _get_delivery_risk_by_eta(eta, order.delivery_by)
         updated_orders.append(
