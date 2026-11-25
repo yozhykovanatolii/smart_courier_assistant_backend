@@ -40,7 +40,7 @@ class OrderOptimizationSchema(BaseModel):
     id: int
     latitude: float
     longitude: float
-    delivery_by: time
+    delivery_by: datetime
     bottle_quantity: int
     delivery_risk: str
     planned_eta: datetime

@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from math import ceil
 from schemas.order import OrderOptimizationSchema
-import time
 
 
 def calculate_service(bottle_quantity: int):
@@ -48,9 +47,8 @@ def calculate_eta_by_arrival(steps: list[dict], orders: list[OrderOptimizationSc
     return updates
             
             
-def _get_delivery_risk_by_eta(eta: datetime, delivery_by: time):
-    delivery_datetime = datetime.combine(eta.date(), delivery_by)
-    difference = delivery_datetime - eta
+def _get_delivery_risk_by_eta(eta: datetime, delivery_by: datetime):
+    difference = delivery_by - eta
     difference_minutes = difference.total_seconds() / 60
     if difference_minutes >= 5:
         return 'On time'
