@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Time, Float, Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float, Boolean
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.dialects.postgresql import ARRAY
 from datetime import datetime
@@ -37,9 +37,7 @@ class Order(Base):
     address = Column(String, nullable=False)
     latitude = Column(Float, nullable=False)
     longitude = Column(Float, nullable=False)
-    floor = Column(Integer, nullable=True, default=None)
-    delivery_by = Column(Time, nullable=False)
-    bottle_volume_liters = Column(Float, nullable=False)
+    delivery_by = Column(DateTime, nullable=False)
     bottle_quantity = Column(Integer, nullable=False)
     courier_comment = Column(String, default=None, nullable=True)
     confirmed_at = Column(DateTime, default=None, nullable=True)
