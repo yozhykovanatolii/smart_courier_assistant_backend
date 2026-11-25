@@ -5,7 +5,7 @@ from schemas.validators import AddressStr, FullNameStr
 class OrderSaveSchema(BaseModel):
     client_full_name: FullNameStr
     client_phone_number: str = Field(pattern=r'^\+380\d{9}$')
-    delivery_by: time
+    delivery_by: datetime
     bottle_quantity: int = Field(gt=0)
     address: AddressStr
     latitude: float
